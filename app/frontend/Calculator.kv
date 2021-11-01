@@ -1,0 +1,90 @@
+
+
+<NumItem>:
+	radius: 20
+	elevation: 0
+	ripple_behavior: True
+	md_bg_color: hex(app.Themes[app.Theme_name]["screen"])
+	on_release: root.refresh_number()
+	
+	MDLabel:
+		text: root.text
+		halign: "center"
+		font_size: "30sp"
+		theme_text_color: "Custom"
+		text_color: hex(root.tex_color)
+		
+			
+
+<CalculatorWidget>:
+	MDBoxLayout:
+		spacing: '1dp'
+		orientation: 'vertical'
+		md_bg_color: hex("#2196F3")
+		
+		MDCard:
+			size_hint_y: .3
+			md_bg_color: hex(app.Themes[app.Theme_name]["screen"])
+			orientation: "vertical"
+			padding: '5dp', '20dp', '5dp', '0dp'
+			ScrollView:
+				MDBoxLayout:
+					adaptive_height: True
+					orientation: "vertical"
+					MDLabel:
+						id: caltext
+						text: ""
+						adaptive_height: True
+						halign: "right"
+						font_size: "60sp"
+						orientation: "vertical"
+					MDLabel:
+						id: result
+						text: ""
+						halign: "right"
+						adaptive_height: True
+						font_size: "25sp"
+						theme_text_color: "Secondary"
+						pos_hint: {'right': 1}
+					
+			
+		MDBoxLayout:
+			spacing: '1dp'
+			size_hint_y: .7
+			md_bg_color: hex("#2196F3")
+			
+			MDBoxLayout:
+				md_bg_color: hex(app.Themes[app.Theme_name]["screen"])
+				
+				MDGridLayout:
+					id: grid
+					cols: 3
+					
+			MDBoxLayout:
+				size_hint_x: .2
+				md_bg_color: hex(app.Themes[app.Theme_name]["screen"])
+				
+				MDGridLayout:
+					raw: 4	
+					cols: 1
+					
+					NumItem:
+						text: "C"
+						tex_color: ("#2196F3")
+						
+					NumItem:
+						text:"÷"
+						tex_color: ("#2196F3")
+						
+					NumItem:
+						text: "×"
+						tex_color: ("#2196F3")
+						
+					NumItem:
+						text: "-"
+						tex_color: ("#2196F3")
+						
+					NumItem:
+						text: "+"
+						tex_color: ("#2196F3")
+			

@@ -1,0 +1,123 @@
+# clean  code !
+
+<Project@MDCard>:
+	radius: 50
+	#size_hint: .4, .5
+	adaptive_height: True
+	orientation: 'vertical'
+	ripple_behavior: True
+	md_bg_color: hex(app.theme['box'])
+	padding: '10dp', '10dp', '10dp', '0dp'
+	# properties ...
+	source: ""
+	title: ""
+	info: ""
+	
+	Image:
+		source: root.source
+		
+	MDBoxLayout:
+		size_hint_y: 1
+		orientation: 'vertical'
+		padding: '0dp', '10dp', '0dp', '0dp'
+		
+		MDLabel:
+			bold: True
+			text: root.title
+			halign: "center"
+			adaptive_height: True
+			
+		MDLabel:
+			halign: "center"
+			text: root.info
+			adaptive_height: True
+			theme_text_color: "Hint"
+			
+		MDBoxLayout:			
+	
+
+<Main>:
+	MDBoxLayout:
+		md_bg_color: hex(app.theme['screen'])
+		ScrollView:
+			bar_width: '0dp'
+			MDBoxLayout:
+				size_hint_y: None
+				height: "680dp"
+				MDBoxLayout:
+					
+					MDBoxLayout:
+						orientation: "vertical"
+						
+						MDBoxLayout:
+							id: T
+							size_hint_y: None
+							height: "180dp"
+							orientation: "vertical"
+							padding: '30dp', '0dp', '0dp', '0dp'
+							
+							MDLabel:
+								font_style: "H4"
+								font_size: "40sp"
+								text: "Galley Kivymd"
+								adaptive_height: True
+								
+							MDLabel:
+								markup: True
+								adaptive_height: True
+								theme_text_color: "Hint"
+								text: f"[font=Icons]{md_icons['map-marker-question-outline']}[/font] gallery kivy material desgin"
+								
+							MDBoxLayout:
+								adaptive_height: True
+								padding: '0dp', '30dp', '0dp', '0dp'
+								
+								MDLabel:
+									text: "{ PROJECTS }"
+									adaptive_height: True
+									theme_text_color: "Hint"
+						
+						MDGridLayout:
+							id: grid
+							cols: 2
+							size_hint_y: None
+							height: "500dp"
+							spacing: 25
+							padding: '30dp', '40dp', '30dp', '20dp'
+							#md_bg_color: hex("#679966")
+							#adaptive_height: True
+							Project:					
+								title: "Kivymd"
+								info: "editor, run, UI"
+								source: "app/images/editor.png"
+								on_release: root.manager.current = "KivymdEditor"
+								
+							Project:
+								title: "LogIn"
+								info: "beautiful, login"
+								source: "app/images/login-user.png"
+								
+							Project:
+								title: "Icons"
+								info: "icons, search"
+								source: "app/images/icons.png"
+								on_release: root.manager.current = "Icons"
+								
+							Project:
+								title: "Widget"
+								info: "kivy + md, widget"
+								source: "app/images/widget.png"
+								
+							Project:
+								title: "Python"
+								info: "editor, python"
+								source: "app/images/py-code.png"
+								
+							Project:
+								info: "plus, ..."
+								title: "calculator"
+								source: "app/images/calculator.png"
+								on_release: root.manager.current = "Calculator"
+		
+		
+			
