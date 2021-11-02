@@ -9,6 +9,7 @@ from kivy.core.window import Window
 from kivy.uix.codeinput import CodeInput
 from kivy.uix.scrollview import ScrollView
 from kivy.extras.highlight import KivyLexer
+from kivy.utils import get_color_from_hex as hex
 from kivy.properties import StringProperty, ObjectProperty
 from kivy.uix.screenmanager import ScreenManager, FadeTransition
 
@@ -16,12 +17,13 @@ from kivymd.toast import toast
 from kivymd.uix.card import MDCard
 from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
+from kivymd.uix.button import MDIconButton
 from kivymd.icon_definitions import md_icons
 from kivymd.uix.list import OneLineIconListItem
+from kivymd.uix.behaviors import TouchBehavior
 from kivymd.uix.menu import MDDropdownMenu
 
 from app.backend.main import Main
 from app.backend.icons import Icons
 from app.backend.kivymdeditor import KivymdEditor
 from app.backend.Calculator import CalculatorWidget
-
