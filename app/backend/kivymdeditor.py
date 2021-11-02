@@ -1,5 +1,6 @@
 from app.librarys import (
 	re,
+	hex,
 	toast,
 	Builder,
 	Splitter,
@@ -12,19 +13,48 @@ from app.librarys import (
 	CodeInput,
 	ScrollView,
 	get_all_styles,
+	MDIconButton,
+	TouchBehavior,
+	ObjectProperty,
 	MDDropdownMenu,
 	
 )
 
+
+
+
+class TouchIconButton(MDIconButton, TouchBehavior):
+	""" for add to MDIconButton on_long_touch function """
+	
+	__is_running = True
+	func  = ObjectProperty()
+	
+	def param(self, app, root):
+		def long_touch():
+			if self.__is_running:
+				self.text_color = hex("#FFFFFF" if app.theme_cls.theme_style == "Dark" else "#000000")
+				toast("will refresh UI at evry a new line you write")
+				self.__is_running = False
+			else:
+				self.text_color = app.theme_cls.primary_color
+				toast("will refresh UI at evry letter you write")
+				self.__is_running = True
+			root.is_running = self.__is_running
+		return long_touch
+		
+	def on_long_touch(self, *args):
+		self.func()
+
+		
+
 class StripSplitter(MDCard):
-	pass
+	""" Desgin Strip """
 	
 class SplitterCode(Splitter):
 	strip_cls = StripSplitter
 	
 class SplitterSettings(Splitter):
 	strip_cls = StripSplitter
-	
 
 
 class KivyInput(CodeInput):
@@ -32,7 +62,6 @@ class KivyInput(CodeInput):
 		super().__init__(*args, **kwargs)
 		self.lexer = KivyLexer()
 		self.is_new_line = False
-		#['default', 'emacs', 'friendly', 'colorful', 'autumn', 'murphy', 'manni', 'material', 'monokai', 'perldoc', 'pastie', 'borland', 'trac', 'native', 'fruity', 'bw', 'vim', 'vs', 'tango', 'rrt', 'xcode', 'igor', 'paraiso-light', 'paraiso-dark', 'lovelace', 'algol', 'algol_nu', 'arduino', 'rainbow_dash', 'abap', 'solarized-dark', 'solarized-light', 'sas', 'stata', 'stata-light', 'stata-dark', 'inkpot', 'zenburn', 'gruvbox-dark', 'gruvbox-light']
 		self.style_name="material"
 		self.open_close = {
 			"(": ")",
@@ -98,6 +127,8 @@ class KivyInput(CodeInput):
 class KivymdEditor(MDScreen):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
+		self.error = False
+		self.is_running = True
 		self.menu = MDDropdownMenu(
 			items= [
 				{
@@ -121,26 +152,30 @@ class KivymdEditor(MDScreen):
 		self.menu.open()
 
 
+	def add_error(self, traceback_error):
+		self.error = True
+		scroll = ScrollView()
+		scroll.add_widget(
+			MDLabel(
+				text=traceback_error,
+				adaptive_height=True,
+				theme_text_color="Error",
+			)
+		)
+		self.ids.ScreenUI.add_widget(scroll)
+
 	
 	def on_text(self, text, ScreenUI, is_new_line):
-	
-		if not is_new_line:
-			return
+		if not self.is_running:
+			if not is_new_line:
+				return
 		try:
 			ScreenUI.clear_widgets()
 			ScreenUI.add_widget(Builder.load_string(text))
+			self.error = False
 		except Exception:
-			scroll = ScrollView()
-			scroll.add_widget(
-				MDLabel(
-					text=(traceback.format_exc()),
-					adaptive_height=True,
-					theme_text_color="Error",
-				)
-			)
-			ScreenUI.add_widget(
-				scroll
-			)
+			self.add_error(traceback.format_exc())
+		
 
 	def on_back_click(self):
 		toast("BACK")
