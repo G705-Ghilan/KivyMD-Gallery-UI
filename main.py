@@ -6,12 +6,12 @@ from app.librarys import (
 	Icons,
 	Builder,
 	Window,
+	traceback,
 	KivymdEditor,
 	FadeTransition,
 	ScreenManager,
 	CalculatorWidget
 )
-
 
 Builder.load_string("""
 #:import toast kivymd.toast.toast
@@ -27,6 +27,25 @@ Builder.load_string("""
 #:include app/frontend/kivymdeditor.kv
 """)
 
+
+from kivy.base import ExceptionHandler, ExceptionManager
+
+class ExceptionApp(ExceptionHandler):
+	""" for handle exception of app """
+	
+	def handle_exception(self, ins):
+		""" catch any exception at runTouchApp and show to user """
+		app = MDApp.get_running_app()
+		if app.screen_manager.current == "KivymdEditor":
+			obj = app.screen_manager.get_screen("KivymdEditor")
+			if not obj.error:
+				obj.add_error(traceback.format_exc())
+		else:
+			toast(f"ERRORAtrunTouchApp: {ins}")
+			
+		return ExceptionManager.PASS
+		
+ExceptionManager.add_handler(ExceptionApp())
 
 class GalleryKivymd(MDApp):
 	
@@ -66,10 +85,8 @@ class GalleryKivymd(MDApp):
 	def android_back_click(self, window: object, key: int, *lasts):
 		''' if user clicked on back click will run this function '''
 		if key == 27:
-			for screen in self.screen_manager.screens:
-				if screen.name == self.screen_manager.current:
-					self.screen_manager.current = "Main"
-					return screen.on_back_click()
-		
+			obj = self.screen_manager.get_screen(self.screen_manager.current)
+			self.screen_manager.current = "Main"
+			return obj.on_back_click()
 
 GalleryKivymd().run()
