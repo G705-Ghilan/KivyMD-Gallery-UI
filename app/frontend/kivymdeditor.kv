@@ -27,7 +27,7 @@
 		pos_hint: {"top": 1}
 		max_size: root.height
 		sizable_from: "bottom"
-		on_press: root.on_text(code_input.text, ScreenUI, True) 
+		#on_press: root.on_text(code_input.text, ScreenUI, True) 
 		
 		ButtonBoxLayout:
 			orientation: 'vertical'
@@ -48,48 +48,56 @@
 					md_bg_color: hex(app.theme['screen'])
 					size_hint_y: None
 					height: settings.height +slider_opacity.height
-					
-					MDGridLayout:
-						id: settings
-						cols: 10
-						adaptive_size: True
-						pos_hint: {'center_x': .5}
-						padding: '0dp', '25dp', '0dp', '0dp'
-						
-						MDIconButton:
-							icon: "arrow-expand-vertical"
-							on_release:
-								self.icon = "arrow-expand-vertical" if root.is_adaptive else "arrow-expand-up"; \
-								root.is_adaptive = not root.is_adaptive
-								
-						MDIconButton:
-							icon: "chevron-double-left"
-							on_release:	code_input.do_undo()
-						
-						MDIconButton:
-							id: fs
-							icon: "numeric-4-box-outline"
-							on_release:
-								self.icon = f"numeric-{int(self.icon[8])+1 if int(self.icon[8]) < 9 else 0}-box-outline"; \
-								code_input.font_size = f'{int(self.icon[8])+10}sp'
-						
-						MDIconButton:
-							icon: "motion-play-outline"
-							on_release: root.on_text(code_input.text, ScreenUI, True) 
+					ScrollView:
+						bar_width: 0
+						MDGridLayout:
+							id: settings
+							cols: 10
+							adaptive_size: True
+							pos_hint: {'center_x': .5}
+							padding: '0dp', '25dp', '0dp', '0dp'
 							
-						MDIconButton:
-							icon: "weather-night"
-							on_release:
-								root.md_bg_color = hex("#263238" if self.icon == "weather-night" else "#FFFFFF"); \
-								self.icon = "weather-night" if self.icon != "weather-night" else "lightbulb-on-outline"
+							MDIconButton:
+								icon: "arrow-expand-vertical"
+								on_release:
+									self.icon = "arrow-expand-vertical" if root.is_adaptive else "arrow-expand-up"; \
+									root.is_adaptive = not root.is_adaptive
+									
+							MDIconButton:
+								icon: "chevron-double-left"
+								on_release:	code_input.do_undo()
+							
+							MDIconButton:
+								id: fs
+								icon: "numeric-4-box-outline"
+								on_release:
+									self.icon = f"numeric-{int(self.icon[8])+1 if int(self.icon[8]) < 9 else 0}-box-outline"; \
+									code_input.font_size = f'{int(self.icon[8])+10}sp'
+							
+							TouchIconButton:
+								func: self.param(app, root)
+								icon: "motion-play-outline"
+								theme_text_color: "Custom"
+								text_color: app.theme_cls.primary_color
+								on_release: root.on_text(code_input.text, ScreenUI, True) 
 								
-						MDIconButton:
-							icon: "chevron-double-right"
-							on_release: code_input.do_redo()
-
-						MDIconButton:
-							icon: "format-color-fill"
-							on_release: root.open_menu(self)
+								
+							MDIconButton:
+								icon: "weather-night"
+								on_release:
+									root.md_bg_color = hex("#263238" if self.icon == "weather-night" else "#FFFFFF"); \
+									self.icon = "weather-night" if self.icon != "weather-night" else "lightbulb-on-outline"
+									
+							MDIconButton:
+								icon: "chevron-double-right"
+								on_release: code_input.do_redo()
+	
+							MDIconButton:
+								icon: "format-color-fill"
+								on_release: root.open_menu(self)
+							MDIconButton:
+								icon: "content-copy"
+								on_release: Clipboard.copy(code_input.text)
 						
 					MDSlider:
 						id: slider_opacity
@@ -104,6 +112,7 @@
 				KivyInput:
 					id: code_input
 					u: ScreenUI
+					padding: dp(5)
 					font_size: f"14sp"
 					hint_text: "{ Code ... } "
 					size_hint: None, None
